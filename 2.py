@@ -1,3 +1,4 @@
+GIVEN_FILE_NAME = "given_2.txt"
 INPUT_FILE_NAME = "input_2.txt"
 
 from enum import Enum
@@ -149,16 +150,32 @@ import unittest
 
 
 class SolverTest(unittest.TestCase):
-    def test_1(self):
+    def solve_1(self, input_file_name: str) -> int:
         solver = Solver()
-        list_of_matches: list[Match] = solver.parse_file_1(INPUT_FILE_NAME)
+        list_of_matches: list[Match] = solver.parse_file_1(input_file_name)
         total_score = solver.get_total_score(list_of_matches)
+        return total_score
+
+    def test_given_1(self):
+        total_score = self.solve_1(GIVEN_FILE_NAME)
+        self.assertEqual(total_score, 15)
+
+    def test_input_1(self):
+        total_score = self.solve_1(INPUT_FILE_NAME)
         self.assertEqual(total_score, 8933)
 
-    def test_2(self):
+    def solve_2(self, input_file_name: str) -> int:
         solver = Solver()
-        list_of_matches: list[Match] = solver.parse_file_2(INPUT_FILE_NAME)
+        list_of_matches: list[Match] = solver.parse_file_2(input_file_name)
         total_score = solver.get_total_score(list_of_matches)
+        return total_score
+
+    def test_given_2(self):
+        total_score = self.solve_2(GIVEN_FILE_NAME)
+        self.assertEqual(total_score, 12)
+
+    def test_input_2(self):
+        total_score = self.solve_2(INPUT_FILE_NAME)
         self.assertEqual(total_score, 11998)
 
 

@@ -1,3 +1,4 @@
+GIVEN_FILE_NAME = "given_3.txt"
 INPUT_FILE_NAME = "input_3.txt"
 from typing import Optional
 
@@ -86,16 +87,30 @@ import unittest
 
 
 class SolverTest(unittest.TestCase):
-    def test_1(self):
+    def solve_1(self, input_file_name: str) -> int:
         solver = Solver()
-        list_of_rucksacks: list[Rucksack] = solver.parse_file(INPUT_FILE_NAME)
-        total_priorities = solver.get_total_priorities(list_of_rucksacks)
+        list_of_rucksacks: list[Rucksack] = solver.parse_file(input_file_name)
+        return solver.get_total_priorities(list_of_rucksacks)
+
+    def test_given_1(self):
+        total_priorities = self.solve_1(GIVEN_FILE_NAME)
+        self.assertEqual(total_priorities, 157)
+
+    def test_input_1(self):
+        total_priorities = self.solve_1(INPUT_FILE_NAME)
         self.assertEqual(total_priorities, 8252)
 
-    def test_2(self):
+    def solve_2(self, input_file_name: str) -> int:
         solver = Solver()
-        list_of_rucksacks: list[Rucksack] = solver.parse_file(INPUT_FILE_NAME)
-        total_priorities = solver.get_total_badge_priorities(list_of_rucksacks)
+        list_of_rucksacks: list[Rucksack] = solver.parse_file(input_file_name)
+        return solver.get_total_badge_priorities(list_of_rucksacks)
+
+    def test_given_2(self):
+        total_priorities = self.solve_2(GIVEN_FILE_NAME)
+        self.assertEqual(total_priorities, 70)
+
+    def test_input_2(self):
+        total_priorities = self.solve_2(INPUT_FILE_NAME)
         self.assertEqual(total_priorities, 2828)
 
 
