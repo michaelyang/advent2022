@@ -118,12 +118,12 @@ class SolverTest(unittest.TestCase):
         return "".join(list_of_top_items)
 
     def test_given_1(self):
-        number_of_fully_overlapping_pairs = self.solve_1(GIVEN_FILE_NAME)
-        self.assertEqual(number_of_fully_overlapping_pairs, "CMZ")
+        string_of_top_items = self.solve_1(GIVEN_FILE_NAME)
+        self.assertEqual(string_of_top_items, "CMZ")
 
     def test_input_1(self):
-        number_of_fully_overlapping_pairs = self.solve_1(INPUT_FILE_NAME)
-        self.assertEqual(number_of_fully_overlapping_pairs, "MQSHJMWNH")
+        string_of_top_items = self.solve_1(INPUT_FILE_NAME)
+        self.assertEqual(string_of_top_items, "MQSHJMWNH")
 
     def solve_2(self, input_file_name: str) -> int:
         solver = Solver()
@@ -135,12 +135,12 @@ class SolverTest(unittest.TestCase):
         return "".join(list_of_top_items)
 
     def test_given_2(self):
-        number_of_fully_overlapping_pairs = self.solve_2(GIVEN_FILE_NAME)
-        self.assertEqual(number_of_fully_overlapping_pairs, "MCD")
+        string_of_top_items = self.solve_2(GIVEN_FILE_NAME)
+        self.assertEqual(string_of_top_items, "MCD")
 
     def test_input_2(self):
-        number_of_fully_overlapping_pairs = self.solve_2(INPUT_FILE_NAME)
-        self.assertEqual(number_of_fully_overlapping_pairs, "LLWJRBHVZ")
+        string_of_top_items = self.solve_2(INPUT_FILE_NAME)
+        self.assertEqual(string_of_top_items, "LLWJRBHVZ")
 
 
 unittest.main(exit=False)
