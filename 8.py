@@ -27,7 +27,8 @@ class Grid:
         return self.rows[row][column]
 
     def __repr__(self):
-        return '\n'.join(''.join(str(item) for item in row) for row in self.rows)
+        return "\n".join("".join(str(item) for item in row) for row in self.rows)
+
 
 class Solver:
     def parse_file(self, input_file_name: str) -> Grid:
@@ -47,23 +48,37 @@ class Solver:
         columns: List[list] = grid.get_columns()
         for i in range(len(columns)):
             for j in range(len(rows)):
-                is_on_edge = (i == 0 or i == len(columns) - 1 or j == 0 or j == len(rows) - 1)
+                is_on_edge = (
+                    i == 0 or i == len(columns) - 1 or j == 0 or j == len(rows) - 1
+                )
                 if is_on_edge:
                     number_of_visible_trees += 1
                     continue
-                is_visible_from_top = max(tree.height for tree in columns[i][:j]) < grid.get_item(i, j).height
+                is_visible_from_top = (
+                    max(tree.height for tree in columns[i][:j])
+                    < grid.get_item(i, j).height
+                )
                 if is_visible_from_top:
                     number_of_visible_trees += 1
                     continue
-                is_visible_from_bottom = max(tree.height for tree in columns[i][j+1:]) < grid.get_item(i, j).height
+                is_visible_from_bottom = (
+                    max(tree.height for tree in columns[i][j + 1 :])
+                    < grid.get_item(i, j).height
+                )
                 if is_visible_from_bottom:
                     number_of_visible_trees += 1
                     continue
-                is_visible_from_left = max(tree.height for tree in rows[j][:i]) < grid.get_item(i, j).height
+                is_visible_from_left = (
+                    max(tree.height for tree in rows[j][:i])
+                    < grid.get_item(i, j).height
+                )
                 if is_visible_from_left:
                     number_of_visible_trees += 1
                     continue
-                is_visible_from_right = max(tree.height for tree in rows[j][i+1:]) < grid.get_item(i, j).height
+                is_visible_from_right = (
+                    max(tree.height for tree in rows[j][i + 1 :])
+                    < grid.get_item(i, j).height
+                )
                 if is_visible_from_right:
                     number_of_visible_trees += 1
                     continue
@@ -83,7 +98,12 @@ class Solver:
     def get_scenic_score(self, grid: Grid, column: int, row: int) -> int:
         rows: List[list] = grid.get_rows()
         columns: List[list] = grid.get_columns()
-        is_on_edge = (column == 0 or column == len(columns) - 1 or row == 0 or row == len(rows) - 1)
+        is_on_edge = (
+            column == 0
+            or column == len(columns) - 1
+            or row == 0
+            or row == len(rows) - 1
+        )
         if is_on_edge:
             return 0
         up_score = 0
@@ -94,28 +114,24 @@ class Solver:
         for tree in trees_to_the_top[::-1]:
             up_score += 1
             if tree.height >= grid.get_item(column, row).height:
-                pass
-        trees_to_the_bottom = columns[column][row+1:]
-        for tree in trees_to_the_bottom:
-            down_score += 1
-            if tree.height >= grid.get_item(column, row).height:
-                pass
+                break
         trees_to_the_left = rows[row][:column]
         for tree in trees_to_the_left[::-1]:
             left_score += 1
             if tree.height >= grid.get_item(column, row).height:
-                pass
-        trees_to_the_right = rows[row][column+1:]
-
+                break
+        trees_to_the_bottom = columns[column][row + 1 :]
+        for tree in trees_to_the_bottom:
+            down_score += 1
+            if tree.height >= grid.get_item(column, row).height:
+                break
+        trees_to_the_right = rows[row][column + 1 :]
         for tree in trees_to_the_right:
             right_score += 1
             if tree.height >= grid.get_item(column, row).height:
-                pass
-        print(left_score)
-        print(right_score)
-        print(up_score)
-        print(down_score)
+                break
         return left_score * right_score * up_score * down_score
+
 
 import unittest
 
@@ -146,7 +162,9 @@ class SolverTest(unittest.TestCase):
         self.assertEqual(highest_scenic_score, 8)
 
     def test_input_2(self):
-        #highest_scenic_score = self.solve_2(INPUT_FILE_NAME)
-        self.assertEqual(highest_scenic_score, 1870)
+        highest_scenic_score = self.solve_2(INPUT_FILE_NAME)
+        self.assertEqual(highest_scenic_score, 517440)
+        return
+
 
 unittest.main(exit=False)
