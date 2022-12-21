@@ -41,7 +41,7 @@ class Solver:
                 valve_dict[name_raw] = valve
         return valve_dict
 
-    def get_highest_pressure_release(self, valve_dict: dict, minutes=26) -> int:
+    def get_highest_pressure_release(self, valve_dict: dict, minutes=30) -> int:
         max_released_pressure = None
         non_zero_flow_rate = 0
         for valve in valve_dict.values():
@@ -58,15 +58,15 @@ class Solver:
             released_pressure: int,
             current_minute: int,
             opened_valves: set,
-            valve_set_dict: dict,
         ):
             nonlocal max_released_pressure
             nonlocal minutes
             nonlocal non_zero_flow_rate
+            nonlocal valve_set_dict
 
             # print("In {} at {}".format(valve.name, current_minute))
             if current_minute > minutes - 1 or len(opened_valves) >= non_zero_flow_rate:
-                return valve_set_dict
+                return
             # open the current valve
             if valve.name not in opened_valves and valve.flow_rate > 0:
                 opened_valves.add(valve.name)
@@ -93,7 +93,7 @@ class Solver:
                     and new_released_pressure > valve_set_dict[frozen_set]
                 ):
                     valve_set_dict[frozen_set] = new_released_pressure
-                else:
+                elif frozen_set not in valve_set_dict:
                     valve_set_dict[frozen_set] = new_released_pressure
                 visit_valve(
                     valve,
@@ -101,7 +101,6 @@ class Solver:
                     new_released_pressure,
                     minute_after_opening,
                     opened_valves,
-                    valve_set_dict,
                 )
                 opened_valves.remove(valve.name)
             # visit connected valve
@@ -119,10 +118,9 @@ class Solver:
                     current_minute + 1,
                     opened_valves,
                 )
-            return valve_set_dict
+            return
 
-        visit_valve(valve_dict["AA"], "", 0, 0, set(), valve_set_dict)
-        print(valve_set_dict)
+        visit_valve(valve_dict["AA"], "", 0, 0, set())
         return max_released_pressure, valve_set_dict
 
     def get_highest_pressure_release_2(self, valve_dict: dict, minutes=26) -> int:
@@ -132,18 +130,17 @@ class Solver:
             if valve.flow_rate > 0:
                 complete_set.add(key)
         highest_pressure_release = None
-        for key, value in dict.items():
-            remaining_set = complete_set.difference(key)
-            if remaining_set:
-                total_pressure_release = dict[frozenset(remaining_set)] + value
-            else:
-                total_pressure_release = value
-            if (
-                highest_pressure_release is None
-                or total_pressure_release >= highest_pressure_release
-            ):
-                print("higher")
-                highest_pressure_release = total_pressure_release
+        for key_1, value_1 in dict.items():
+            total_pressure_release = value_1
+            for key_2, value_2 in dict.items():
+                if key_1.intersection(key_2):
+                    continue
+                total_pressure_release = value_1 + value_2
+                if (
+                    highest_pressure_release is None
+                    or total_pressure_release >= highest_pressure_release
+                ):
+                    highest_pressure_release = total_pressure_release
 
         return highest_pressure_release
 
@@ -155,15 +152,14 @@ class SolverTest(unittest.TestCase):
     def solve_1(self, input_file_name: str) -> int:
         solver = Solver()
         valve_dict = solver.parse_file(input_file_name)
-        highest_pressure_release = solver.get_highest_pressure_release(valve_dict)
+        highest_pressure_release, _ = solver.get_highest_pressure_release(valve_dict)
         return highest_pressure_release
 
     def test_given_1(self):
-        highest_pressure_release, _ = self.solve_1(GIVEN_FILE_NAME)
+        highest_pressure_release = self.solve_1(GIVEN_FILE_NAME)
         self.assertEqual(highest_pressure_release, 1651)
 
     def test_input_1(self):
-        return
         highest_pressure_release, _ = self.solve_1(INPUT_FILE_NAME)
         self.assertEqual(highest_pressure_release, 1940)
 
@@ -174,14 +170,12 @@ class SolverTest(unittest.TestCase):
         return highest_pressure_release
 
     def test_given_2(self):
-        return
         highest_pressure_release = self.solve_2(GIVEN_FILE_NAME)
-        self.assertEqual(highest_pressure_release, 1651)
+        self.assertEqual(highest_pressure_release, 1707)
 
     def test_input_2(self):
-        return
-        highest_pressure_release = self.solve_1(INPUT_FILE_NAME)
-        self.assertEqual(highest_pressure_release, 1940)
+        highest_pressure_release = self.solve_2(INPUT_FILE_NAME)
+        self.assertEqual(highest_pressure_release, 2469)
 
 
 unittest.main(exit=False)
